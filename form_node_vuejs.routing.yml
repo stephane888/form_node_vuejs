@@ -28,3 +28,14 @@ form_node_vuejs.ManageField:
   options:
     no_cache: 'TRUE'
     
+form_node_vuejs.getformnode:
+  path: '/api/form-node-vuejs/node/{bundle}'
+  methods: [GET]
+  defaults:
+    _controller: '\Drupal\form_node_vuejs\Controller\FormNodeVuejsApi::getForm'
+    _title: 'Ajouter du contenu'
+  options:
+    _auth: [ 'basic_auth' ]
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    

@@ -99,13 +99,14 @@ class NodeRestResource extends ResourceBase {
    *          ' form=> renvoit les champs du formulaire en question '
    * @param string $id
    *          ' bundle for node, or '
-   *
+   *          
    * @return \Drupal\rest\ResourceResponse The HTTP response object.
-   *
+   *        
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException Throws exception expected.
    */
   public function get($action, $id, Request $request)
   {
+    return $this->getTestData();
     $result = [];
     $this->request = $request;
     // debugLog::logs( [], 'server_request_headers', 'kint0' );
@@ -123,7 +124,6 @@ class NodeRestResource extends ResourceBase {
     }
 
     // custom permission
-
     $this->permission = new FormNodeVuejsAccess();
     if (! $this->permission->readDatas($this->currentUser)->isAllowed()) {
       return new ResourceResponse('vous n\'avez pas les droits suffisant pour acceder à cette ressources ', 401);
@@ -148,13 +148,21 @@ class NodeRestResource extends ResourceBase {
     return $response;
   }
 
+  protected function getTestData()
+  {
+    $result = [];
+    $response = new ResourceResponse($result, 200);
+    $response->addCacheableDependency($result);
+    return $response;
+  }
+
   /**
    * Responds to PUT requests.
    *
    * @param string $payload
    *
    * @return \Drupal\rest\ModifiedResourceResponse The HTTP response object.
-   *
+   *        
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException Throws exception expected.
    */
   public function put($payload)
@@ -173,7 +181,7 @@ class NodeRestResource extends ResourceBase {
    * @param string $payload
    *
    * @return \Drupal\rest\ModifiedResourceResponse The HTTP response object.
-   *
+   *        
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException Throws exception expected.
    *         form-node
    */
