@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * @file
+ * Contains form_node_vuejs.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\form_node_vuejs\FormNodeVuejsTables;
+use Drupal\Core\Database\Database;
+/**
+ * Implements hook_help().
+ */
+function form_node_vuejs_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the form_node_vuejs module.
+    case 'help.page.form_node_vuejs':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('permet de creer, modifier ou supprimer les nodes avec VueJs') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function form_node_vuejs_theme() {
+  return [
+	    'form_node_vuejs' => [
+	      'render element' => 'children',
+	    ],
+  		'form_node_vuejs_node' => [
+  				'render element' => 'children',
+  		],
+  ];
+}
+
+/**
+ * Implements hook_rebuild().
+ */
+function form_node_vuejs_rebuild() {
+	//Drupal::messenger()->addMessage('Cache vider et form_node_vuejs execute verification');
+	$schema = FormNodeVuejsTables::form_node_vuejs_datasperfoms();
+	$table='form_node_vuejs_datasperfoms';
+	if( ! Database::getConnection()->schema()->tableExists($table) ){
+		Database::getConnection()->schema()->createTable($table, $schema['form_node_vuejs_datasperfoms'] );
+		\Drupal::messenger()->addMessage(' Table '.$table.' a été crée ');
+	}
+}

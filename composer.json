@@ -1,0 +1,13 @@
+{
+    "name": "form_node_vuejs",
+    "type": "drupal-module",
+    "description": "permet de creer, modifier ou supprimer les nodes avec VueJs",
+    "keywords": [
+    ],
+    "homepage": "https://www.drupal.org/project/form_node_vuejs",
+    "minimum-stability": "dev",
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/form_node_vuejs",
+        "source": "http://cgit.drupalcode.org/form_node_vuejs",
+    },
+}

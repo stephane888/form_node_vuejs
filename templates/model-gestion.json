@@ -1,0 +1,10 @@
+{
+    "container":{
+        "name":"lecture du fichier",
+        "description":"Permet de lire le contenu des fichiers csv ou txt via le JS et de renvoyer le contenu sous forme d'objet.",
+        "html":"",
+        "methodes":{},
+        "attribut":{}
+    }
+}
+

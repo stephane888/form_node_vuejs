@@ -1,0 +1,6 @@
+form_node_vuejs.managefield:
+  title: 'Form form_node_vuejs'
+  description: 'customize the form display'
+  parent: system.admin_config_ui
+  route_name: form_node_vuejs.ManageField
+  weight: 100

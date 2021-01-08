@@ -1,0 +1,30 @@
+form_node_vuejs.addnode:
+  path: '/form-node-vuejs/add/node/{bundle}'
+  defaults:
+    _controller: '\Drupal\form_node_vuejs\Controller\FormNodeVuejsDefault::addnode'
+    _title: 'Ajouter du contenu'
+  requirements:
+    _custom_access: '\Drupal\form_node_vuejs\Controller\FormNodeVuejsAccess::writeDatas'
+  options:
+    no_cache: 'TRUE'
+      
+form_node_vuejs.editnode:
+  path: '/form-node-vuejs/edit/node/{id}'
+  defaults:
+    _controller: '\Drupal\form_node_vuejs\Controller\FormNodeVuejsDefault::updatenode'
+    _title: 'Modifier le contenu'
+  requirements:
+    _custom_access: '\Drupal\form_node_vuejs\Controller\FormNodeVuejsAccess::writeDatas'
+  options:
+    no_cache: 'TRUE'
+    
+form_node_vuejs.ManageField:
+  path: '/admin/config/user-interface/form-node-vuejs/manage-field'
+  defaults:
+    _controller: '\Drupal\form_node_vuejs\Controller\FormNodeVuejsAdmin::ManageField'
+    _title: 'Manage ticket'
+  requirements:
+    _custom_access: '\Drupal\form_node_vuejs\Controller\FormNodeVuejsAccess::adminDatas'
+  options:
+    no_cache: 'TRUE'
+    

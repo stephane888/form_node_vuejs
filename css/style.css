@@ -1,0 +1,133 @@
+/**
+ * translation on hover
+ */
+/**
+ * Before cover
+ */
+/**
+ * Before cover
+ */
+/**
+ *  pas de retour à la ligne
+ */
+/**
+ *  mixin for multiline limit text css
+ */
+/**
+ * .list-element{@include list-element(($paddingY:10px, $paddingX:5px, $borderW:1px));}
+ */
+.over-hidden {
+  overflow: hidden; }
+
+.form-group.required > label {
+  position: relative; }
+
+.form-group.required > label:after {
+  content: "*";
+  position: absolute;
+  right: -10px;
+  top: -1px;
+  color: #f00; }
+
+.blockSearchModal .modal-body {
+  min-height: 340px; }
+
+.simpleList > * {
+  width: 240px;
+  border-bottom: 1px solid #eee;
+  margin-right: 10px;
+  position: relative; }
+
+.simpleList a {
+  display: block;
+  padding: 5px 15px; }
+
+.simpleList a:hover {
+  background: #faebd7; }
+
+.simpleList div i {
+  position: absolute;
+  top: 31%;
+  left: 0; }
+
+/**
+ * create_terms
+ */
+.container-create {
+  bottom: 0;
+  left: 0;
+  right: 0; }
+
+.create_terms {
+  transition-property: all;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in-out;
+  position: absolute;
+  bottom: 0;
+  z-index: 99;
+  background: #FFF;
+  left: 0;
+  right: 0;
+  padding: 15px;
+  border-top: 1px solid #eee;
+  height: 100%;
+  top: 100%; }
+
+.create_terms.open {
+  margin-top: -50px; }
+
+.create_terms.open_all {
+  margin-top: 0;
+  top: 0; }
+
+/**
+ *
+ */
+.select2-container {
+  min-width: 150px; }
+
+.modelisation .zoom_space {
+  margin: 0 !important;
+  justify-self: right;
+  position: absolute;
+  left: auto;
+  right: 15px; }
+  .modelisation .zoom_space i {
+    color: #FFF; }
+.modelisation .custom-popup {
+  width: 500px;
+  position: fixed;
+  z-index: 1;
+  padding: 0;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0; }
+  .modelisation .custom-popup > * {
+    width: 100%; }
+.modelisation .custom-popup-background {
+  background: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: none; }
+.modelisation .custom-popup-background.active {
+  display: block; }
+
+.modelisation.open {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  background: #FFF;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0; }
+  .modelisation.open > div {
+    padding: 25px;
+    height: 100%;
+    overflow: scroll; }

@@ -1,0 +1,8 @@
+name: 'form node VueJs'
+type: module
+description: 'permet de creer, modifier ou supprimer les nodes avec VueJs'
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: 'Custom'
+dependencies:
+  - restui

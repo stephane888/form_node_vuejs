@@ -1,0 +1,14 @@
+form_node_vuejs read:
+  title: 'utilisateur authentifié'
+  description: 'asses au infos'
+  restrict access: true
+  
+form_node_vuejs write:
+  title: 'utilisateur avec des privileges'
+  description: 'asses au infos et modifications'
+  restrict access: true
+
+form_node_vuejs admin:
+  title: 'utilisateur administrateurs'
+  description: 'asses au infos et modifications'
+  restrict access: true

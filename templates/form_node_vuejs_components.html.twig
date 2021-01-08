@@ -1,0 +1,492 @@
+<!-- alert -->
+<template id="template-alert">
+  <div >
+    <div :class="class_alert" :attribut="alert_attribut_class" role="alert"  :id="alert_id_html" v-if="show_alert">
+      <div v-html="alert_message"></div>
+      <button type="button" class="close"  aria-label="Close"><span aria-hidden="true" @click="closeByParent">&times;</span></button>
+    </div>
+  </div>
+</template>
+
+<!--  -->
+  <template id="form-template">
+    <form :class="classe" >
+      <div v-for="(field, index) in fields" :class="field_class">
+        <formfield :renderfield="field" :model="model0" @ev_saveimage_by_parent="saveImage2" @value_have_change="value_in_field_changed"></formfield>
+      </div>
+      <div class="d-inline-block w-100">
+        <button type="button" :disabled="submit.disabled" class="btn " :class="submit_classe" @click="save_f2" v-if="submit.show" >${submit.label}<i class=" b-inline-block ml-2 fas fa-save"></i></button>
+      </div>
+    </form>
+  </template>
+  
+<!-- @ev_actionparent="executeparentaction" 
+      @ev_alert="display_alert" 
+      @ev_form_have_saved="form_have_saved" -->
+  <template id="form-formgenerate_node">
+    <div class="form-grids widget-shadow forms" 
+      :bundle="bundle" action="edit"      
+      >
+      <div class="form-title" >
+        <h4 v-html="editform_title"></h4>
+      </div>
+      <div class="form-body" :class="add_cover">
+        <alert :show_alert="show_alert" :alert_message="alert_message" :alert_attribut_class="alert_attribut_class" :alert_id_html="alert_id_html" @ev_alert_close="alertcloseByParent"></alert>
+        <waitingload_multibuoule :show_waiting_multibuoule="show_waiting_multibuoule"></waitingload_multibuoule>
+        <formgenerate :fields="formdatas.fields" :model0="formdatas.model" :submit="formdatas.submit"  @ev_saveform="saveform" :classe="classe" @ev_saveimage_by_parent="saveImage" ></formgenerate>
+        <waitingboule :show_waiting_boule="show_waiting_boule" :text="waiting_boule_message"></waitingboule>
+      </div>
+    </div>
+  </template>
+  
+    <template id="template-waitingload">
+    <div v-if="show_waiting_multibuoule" class="waitingmultiboule  load">
+          <div class=" p-4">
+            <div class="loader">
+              <div class="loader--dot"></div>
+              <div class="loader--dot"></div>
+              <div class="loader--dot"></div>
+              <div class="loader--dot"></div>
+              <div class="loader--dot"></div>
+              <div class="loader--dot"></div>
+              <div class="loader--text"></div>
+            </div>
+          </div>
+        </div>
+  </template>
+
+<!-- progress -->
+<template id="template-progress">
+  <div class="progress" v-if="show_progress">
+    <div class="progress-bar" :class="{'progress-bar-striped': is_perform_progress, 'bg-primary':has_error_progress, 'bg-success':is_susses_progress  }" role="progressbar" :style="{ width: progress_value +'%' }" :aria-valuenow="progress_value" aria-valuemin="0" aria-valuemax="100">${(has_error_progress)?'Error ...' : progress_value +'%'}</div>
+  </div>
+</template>
+
+<!-- waitingboule -->
+<template id="template-waitingboule">
+  <div class="waitingboule" v-if="show_waiting_boule">
+    <div class="bounceball"></div>
+    <div class="text" v-html="text"></div>
+  </div>
+</template>
+
+<!-- list-group  -->
+<template id="template-list-group">
+  <ul class="list-group" :class="classe">
+    <li class="list-group-item list-group-item-secondary" v-if="show_header"><h5>${header}</h5></li>
+    <list class="list-group-item list-group-item-light" v-for="(value, index) in rows" :key="index"  :valeur_badge="valeur_badge(value)" :datas="value" @ev_click_on_list="click_on_list_2"></list>
+  </ul>
+</template>
+
+  <!-- form-template-input-radio -->
+  <template id="form-template-input-radio">
+  <div :class="{'required':field.require}">
+    <label :for="id_html">${field.label}</label>
+    <div class="d-block">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" v-model="model[field.model].value" :id="id_html" :name="name" :value="value_on">
+          <label class="form-check-label" :for="id_html">${field.textOn}</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" v-model="model[field.model].value" :id="id_html_off" :name="name" :value="value_off">
+          <label class="form-check-label" :for="id_html_off">${field.textOff}</label>
+        </div>
+    </div>
+    <div v-if="field.description"><small class="text-mute" v-html="field.description"></small></div>
+    </div>
+  </template>
+  
+  <!-- form-template-input-checkbox -->
+  <template id="form-template-input-radios">
+    <div :class="{'required':field.require}">
+      <label :for="id_html">${field.label}</label>
+      <div class="d-block">
+          <div v-for="(option_label, index) in field.options" class="form-check form-check-inline">
+              <div class="custom-control custom-radio " >
+                <input type="radio" class="custom-control-input" :id="id_html + index" :value="index" v-model="valeur" @change="validation_radios">
+                <label class="custom-control-label" :for="id_html + index" v-html="option_label"></label>
+              </div>
+          </div>
+      </div>
+      <div v-if="field.description"><small class="text-mute" v-html="field.description"></small></div>
+    </div>
+  </template>
+  
+  <!-- form-template-input-autocomplete -->
+  <template id="form-template-input-autocomplete">
+    <div :class="{'required':field.require}">
+      <label :for="id_html">${field.label}</label>
+      <div class="input-group">
+        <input :id="id_html" class="form-control" type="text" v-model="model[field.model].label_term" @keyup="autocomplete_function" >
+        <div class="input-group-append" >
+          <span class="input-group-text"><i :data-spin="id_html" class="fas fa-sync"></i></span>
+        </div>
+      </div>
+      <div v-if="field.description"><small class="text-mute" v-html="field.description"></small></div>
+    </div>
+  </template>
+  
+  <!-- form-template-input-autocomplete -->
+  <template id="form-template-input-autocomplete-popup">
+    <div :class="{'required':field.require}">
+      <label :for="id_html">${field.label}</label>
+      <div class="input-group"  @click="openmodalsearch" data-toggle="modal" :data-target="'#'+id_html+'modal'">
+        <span :id="id_html" class="form-control" v-html="model[field.model].label_term"></span>
+        <div class="input-group-append" >
+          <span class="input-group-text" v-html="textselect"></span>
+        </div>
+      </div>
+      <!-- Modal -->
+        <div class="modal fade blockSearchModal" :id="id_html+'modal'" role="dialog" :aria-labelledby="id_html+'modallabel'" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content over-hidden">
+              <div class="modal-header">
+                <h5 class="modal-title" :id="id_html+'modallabel'" v-html="modal_title"> Recherchez et selectionnez </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body ">
+                <div class="form-group mb-3">
+                    <div class="input-group">
+                      <input  class="form-control" type="text" placeholder="Saisir les premières lettres du terme à rechercher" v-model="search" @keyup="autocomplete_function" >
+                      <div class="input-group-append" >
+                        <span class="input-group-text"><i :data-spin="id_html" class="fas fa-sync"></i></span>
+                      </div>
+                    </div>
+                </div>
+                <!-- text -->
+                <div class="d-flex flex-wrap simpleList ">
+                  <div v-for="(term, index) in terms">
+                    <i class="fas fa-angle-right"></i><a href="#" v-html="term.label" @click="select_term" :data-term-id="term.id"></a>
+                  </div>
+                </div>
+                <div v-if="empty_message" class="pl-3"><b>Aucun terme trouvé</b></div>
+                <div class="container-create propose-terme" v-if="field.custom_settings && field.custom_settings.proposeterme">
+                  <div class="create_terms" :class=" [(create_term == 'none') ? 'none' : '', (create_term == 'open') ? 'open' : '', (create_term == 'open_all') ? 'open_all' : ''] ">
+                    <a href="#" @click="open_create_terms" class="d-block mb-3"><h6 class="text-dark"><strong v-html="field.custom_settings.proposeterme"> Vous ne trouvez pas votre localité ? </strong><i class="fas fa-arrow-right pl-2 text-primary"></i></h6></a>
+                    <strong class="d-block text-primary p-2 mb-2 bg_link_color_light"> Sélectionné la ville et ajouté votre localité.  NB: Nous vérifierons les données ajoutées. </strong>
+                    <div class="form-group">
+                      <label> Ville <small class="d-inline-block ml-3"><i :data-spin="id_html" class="fas fa-sync "></i></small></label>
+                      <select v-model="ville_select" @change="select_ville" class="form-control">
+                        <option v-for="(ville, index) in villes" :value="ville.id" v-html="ville.label"></option>
+                      </select>
+                    </div>
+                    <div class="form-group" >
+                      <label> Localite / quartier </label>
+                      <input  class="form-control" type="text" v-model="search" >
+                    </div>
+                    <div class="form-group">
+                      <span class="btn " @click="add_localite" :class="[(ville_select == '')? 'disabled' : 'btn-outline-primary']"> Ajouter la localité </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="container-create propose-terme" v-if="field.custom_settings && field.custom_settings.createterme">
+                  <div class="create_terms" :class=" [(create_term == 'none') ? 'none' : '', (create_term == 'open') ? 'open' : '', (create_term == 'open_all') ? 'open_all' : ''] ">
+                    <a href="#" @click="open_create_terms" class="d-block mb-3"><h6 class="text-dark"><strong v-html="field.custom_settings.create_title"> Add terms ? </strong><i class="fas fa-arrow-right pl-2 text-primary"></i></h6></a>
+                    <strong class="d-none text-primary p-2 mb-2 bg_link_color_light"> Sélectionné la ville et ajouté votre localité.  NB: Nous vérifierons les données ajoutées. </strong>
+                    <div class="form-group">
+                        <div v-for="(niveau, i) in list_hierachique_terms">                        
+                           <input_entity_reference_select2 :field="field" :model="model" :id_html="'n'+niveau.parent+'_'+id_html" :parent_tid="niveau.parent" @ev_select_value="select_from_sub_select(i, $event)" :headers="niveau.headers_select2"></input_entity_reference_select2> 
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <send_data_ajax :url="open_url_get"  @ev_data_from_ajax="open_data_from_ajax"  :datas="open_post_datas" :loading="open_post_loading"></send_data_ajax>  
+        <get_data_ajax  :url="open_url_get"  @ev_data_from_ajax="open_data_from_ajax"  :loading="open_get_loading" :headers="open_headers" ></get_data_ajax>  
+    </div>
+  </template>
+  <!-- form-template-input-image -->
+  <template id="form-template-input-image">
+    <div :class="{'required':field.require}">
+            <div class="file-upload-form mb-3" >
+                <label :for="id_html" class="d-block">${field.label} </label>
+                <div v-if="field.cardinality > 1">
+                  <input type="file" @change = "previewImage" :accept="accept" :id="id_html" multiple="true" v-show="show_file">
+                </div>
+                <div v-if="field.cardinality == 1">
+                  <input type="file" @change = "previewImage" :accept="accept" :id="id_html" v-show="show_file">
+                </div>                
+                <div v-if="field.settings.max_filesize && field.settings.max_filesize != '' "><small>taille par fichier : ${field.settings.max_filesize}</small></div>
+                <div v-if="field.settings.file_extensions && field.settings.file_extensions != '' "><small>Extentions autorisées : ${field.settings.file_extensions}</small></div>    
+                <div v-if="field.description"><small class="text-mute" v-html="field.description"></small></div>            
+            </div>
+            <div class="image-preview" v-if="model[field.model].image_data.length > 0">
+              <div v-for="(data, index) in model[field.model].image_data" class="border p-3 mb-3 " :progress_value="progress_value"><!-- :progress_value="progress_value" => to perform computed  -->
+                <div class="d-table w-100">
+                  <div class="d-table-cell w-25">
+                    <img class="preview img-fluid img-thumbnail" :src="data.link_file" >
+                  </div>
+                  <div class="d-table-cell align-middle text-right">
+                    <div class="d-flex justify-content-between">
+                      <div>
+                        <small v-html="data.message" class="p-3 d-block text-left text-danger"></small>
+                      </div>
+                      <div>
+                        <span class="btn btn-outline-primary mt-3 btn-sm" @click="remove_image(index)" >Remove<i class=" b-inline-block ml-2 fas fa-trash"></i></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <wbu_progress class="mt-2" :show_progress="show_progress" :progress_value="data.progress_value" :is_perform_progress="data.is_perform_progress" :has_error_progress="data.has_error_progress" :is_susses_progress="data.is_susses_progress"></wbu_progress>
+              </div>
+            </div>
+            <!--  <pre>${model[field.model]}</pre> -->
+        </div>
+  </template>
+    <!-- form-template-input-file -->
+  <template id="form-template-input-file">
+    <div :class="{'required':field.require}">
+            <div class="file-upload-form mb-3" >
+                <label :for="id_html" class="d-block">${field.label} </label>
+                <div v-if="field.cardinality > 1">
+                  <input type="file" @change="previewImage" :id="id_html" :accept="accept" multiple="true" v-show="show_file">
+                </div>
+                <div v-if="field.cardinality == 1">
+                  <input type="file" @change="previewImage" :id="id_html" :accept="accept" v-show="show_file">
+                </div>
+                <div v-if="field.settings.max_filesize && field.settings.max_filesize != '' "><small>taille par fichier : ${field.settings.max_filesize}</small></div>
+                <div v-if="field.settings.file_extensions && field.settings.file_extensions != '' "><small>Extentions autorisées : ${field.settings.file_extensions}</small></div> 
+                <div v-if="field.description"><small class="text-mute" v-html="field.description"></small></div>
+            </div>
+            <div class="image-preview" v-if="model[field.model].image_data.length > 0">
+              <div v-for="(data, index) in model[field.model].image_data" class="border p-3 mb-3 " :progress_value="progress_value"><!-- :progress_value="progress_value" => to perform computed  -->
+                <div class="d-table w-100">
+                  <div class="d-table-cell w-75">
+                    <div class="d-table w-100">
+                      <div class="d-table-cell w-25"><img width="30px" alt="" :src="data.src_vignete" class="mr-2"></div>
+                      <div class="d-table-cell align-middle">
+                      <div class="pb-2" v-if="data.message != ''"> <small v-html="data.message" class="p-3 d-block text-left text-danger"></small> </div>
+                      <a :href="data.link_file">${data.filename}</a></div>
+                    </div>
+                  </div>
+                  <div class="d-table-cell align-middle text-right">
+                    <span class="btn btn-outline-primary ml-2" @click="remove_image(index)" >Remove<i class=" b-inline-block ml-2 fas fa-trash"></i></span>
+                  </div>                  
+                </div>
+                <wbu_progress class="mt-2" :show_progress="show_progress" :progress_value="data.progress_value" :is_perform_progress="data.is_perform_progress" :has_error_progress="data.has_error_progress" :is_susses_progress="data.is_susses_progress"></wbu_progress>
+              </div>
+            </div>
+        </div>
+  </template>
+  <!-- form-template-integer -->
+  <template id="form-template-integer">
+  <div :class="{'required':field.require}">
+    <label :for="id_html">${label}</label>
+    <div :class="integer_group">
+      <div  class="input-group-prepend" v-if="prefix"> 
+        <span class="input-group-text" v-html="message_prefix"></span> 
+      </div>
+      <input :id="id_html" class="form-control" type="number" v-model="name.value" :min="min" :max="max" @keyup="validation_string">
+      <div  class="input-group-prepend" v-if="suffix"> 
+        <span class="input-group-text" v-html="message_suffix"></span> 
+      </div>
+    </div>
+    <div v-if="field.description"><small class="text-mute" v-html="field.description"></small></div>
+    </div>
+  </template>
+    <!-- form-template-input-datetime -->
+    <template id="form-template-input-datetime">
+    <div :class="{'required':field.require}">
+      <label :for="id_html">${label}</label>
+      <div class="d-flex">
+        <div class="input-group mb-2">
+          <input :id="id_html" class="form-control" type="text" @input="oninput" v-model="date_value">
+          <div class="input-group-prepend">
+            <button class="input-group-text ui-datepicker-trigger" :id="id_html_trigger">
+              <i class="far fa-calendar-alt"></i>
+            </button>
+          </div>
+        </div>
+        <div class="input-group clockpicker mb-2 ml-2" style=" width: 175px; " data-placement="left" data-align="top" data-autoclose="true">
+          <input type="text" class="form-control " :id="'clock'+id_html" v-model="heure_value"> 
+          <div  class="input-group-prepend"> 
+            <span class="input-group-text"> <i class="fas fa-clock"></i> </span> 
+          </div>
+        </div>
+      </div>  
+      <div v-if="field.description"><small class="text-mute" v-html="field.description"></small></div>  
+    </div>
+    </template>
+<!-- form-template-input-date -->
+  <template id="form-template-input-date">
+    <div :class="{'required':field.require}">
+      <label :for="id_html">${label}</label>
+      <div class="input-group mb-2">
+        <input :id="id_html" class="form-control" type="text" @input="oninput"  v-model="date_value" >
+        <div class="input-group-prepend">
+          <button class="input-group-text ui-datepicker-trigger" :id="id_html_trigger"><i class="far fa-calendar-alt"></i></button>
+        </div>
+      </div>
+      <div v-if="field.description"><small class="text-mute" v-html="field.description"></small></div>
+    </div>    
+  </template>
+    <!-- form-template-input-textarea -->
+  <template id="form-template-textarea-html">
+    <div :class="{'required':field.require}">
+      <label :for="id_html">${label}</label>
+      <!-- <textarea :id="id_html" class="form-control" rows="3" v-model="name.processed"></textarea> -->
+      <ckeditor v-model="name.processed" :id="id_html" :height="height" ></ckeditor>
+      <div v-if="field.description"><small class="text-mute" v-html="field.description"></small></div>
+    </div>
+  </template>
+  <!-- form-template-input-text  -->
+  <!-- example : <input_text :name="name" :field="field_info" :id="id_html"></input_text> name and field are array-->
+  <template id="form-template-input-text">
+  <div :class="{'required':field.require}">
+    <label :for="id_html">${label}</label>    
+      <input :id="id_html" class="form-control" type="text" v-model="name.value" :maxlength="maxlength" @keyup="validation_string">    
+      <div v-if="field.description"><small class="text-mute" v-html="field.description"></small></div>
+    </div>
+  </template>
+
+<!--  -->
+
+<template id="form-template-input-select">
+        <div :class="{'required':field.require}">
+            <label :for="id_html">${field.label}</label>
+            <select class="form-control " v-model="name" :id="id_html" @change="select_value">  
+            <option v-for="(value, index) in field.options" :value="index">${value}</option>
+            </select>
+            
+            <div v-if="field.description"><small class="text-mute" v-html="field.description"></small></div>
+        </div>
+</template>
+    
+
+<!-- form-template-select -->
+<template id="form-template-select-v2">
+    <div :class="classe">
+        <div class="form-group" >
+          <label :for="id_html" v-html="label"></label> 
+          <select :id="id_html" v-model="input.value" class="form-control" @change="event_input" :size="size_option"> 
+            <option v-if="show_empty_option" value="">Choisir...</option>
+            <option v-for="(option, index) in options" v-html="option" :value="index"></option>
+          </select>
+        </div>
+    </div>
+</template> 
+
+<!-- form-template-input -->
+<template id="form-template-input-v2">
+    <div :class="classe">
+        <div class="form-group" :class="classe">
+          <label :for="id_html" v-html="label" v-if="label"></label> 
+          <input :id="id_html" class="form-control" v-model="input.value" :placeholder="placeholder" required="required" v-if="required">
+          <input :id="id_html" class="form-control" v-model="input.value" :placeholder="placeholder"  v-if="!required">
+        </div>
+    </div>
+</template>
+<!-- form-template-input -->
+<template id="form-template-textarea-v2">
+    <div :class="classe">
+        <div class="form-group" :class="classe">
+          <label :for="id_html" v-html="label" v-if="label"></label> 
+          <textarea :id="id_html" class="form-control" v-model="input.value" :rows="rows" :cols="cols" required="required" v-if="required" ></textarea>
+          <textarea :id="id_html" class="form-control" v-model="input.value" :rows="rows" :cols="cols" v-if="!required"></textarea>
+        </div>
+    </div>
+</template>
+<!--  -->   
+<template id="form-template-input_select2">
+    <div :class="[field.require ? 'required':'not-required', field.model ? field.model:'']">
+            <label :for="id_html">${field.label}</label>
+            <div class="input-group">
+                <select class="form-control " v-model="name" :id="id_html" @change="select_value">  
+                    <option v-for="(value, index) in field_options" :value="value.id">${value.label}</option>
+                </select>
+                <div class="input-group-append" >
+                    <span class="input-group-text btn btn-sm" :id="'add_'+id_html" @click="add_terme"><i :data-spin="id_html" class="fas fa-plus"></i> </span>
+                </div>
+                <div v-if="field.description"><small class="text-mute" v-html="field.description"></small></div>
+            </div>   
+            <send_data_ajax :url="url_get"  @ev_data_from_ajax="data_from_ajax"  :datas="post_datas" :loading="post_loading"></send_data_ajax>  
+            <get_data_ajax :url="url_get"  @ev_data_from_ajax="data_from_ajax" :loading="get_loading" :headers="headers" ></get_data_ajax>       
+    </div>
+</template>
+
+<!--  -->
+<template id="form-template-field-json-type">
+    <div :id="'mvc-'+id_html" class="modelisation">
+        <div>
+            <h3 v-html="field.label" class="mb-3"></h3>
+            <div class="d-flex mb-3">
+                <span class=" btn btn-sm btn-outline-info mr-3" :id="'add_container_'+id_html" @click="add_container"><i class="fas fa-plus"></i> Ajouter un container </span>
+                <span class=" btn btn-sm btn-outline-info mr-3" :id="'add_function_'+id_html" @click="add_function"><i class="fas fa-plus"></i> Ajouter une fonction </span>            
+                <span class=" btn btn-sm btn-info mr-3 zoom_space" :id="'zoom_'+id_html" @click="zoom_space"><i class="fas fa-search-plus"></i> </span>
+            </div>        
+            <div class="d-flex mb-3 flex-column">
+                <div class="headers w-100">
+                    <div class="custom-popup-background" @click="hidden_popup"></div>
+                    <div class="custom-popup d-flex justify-content-center align-items-center" v-if="show_header">
+                        <component v-bind:is="template_modelisation_header" :datas="current_object" @ev_manage_datas="manage_datas"></component>
+                    </div>
+                </div>
+                <div class="body w-100">
+                    <component v-bind:is="template_modelisation_body" :modelisation="modelisation" v-show="show_body"></component>
+                </div>
+            </div>
+            <pre>${model[field.model]}</pre>
+        </div>
+    </div>
+</template>    
+
+<!--  -->
+<template id="template-modelisation-container">
+    <div class="card">
+        <div class="card-header">
+            <h5 >Ajout du conteneur</h3>
+        </div>
+        <div class="card-body">
+            <input_text_v2 :label="'Nom du container'" :input="datas.name"></input_text_v2>
+            <input_textarea_v2 :label="'Description'" :input="datas.desc"></input_textarea_v2>
+        </div>
+        <div class="card-footer">
+            <span class=" btn btn-sm btn-outline-success float-right "  @click="save_datas">Ajouter <i class="far fa-save ml-2"></i> </span>
+        </div>
+    </div>
+</template>
+
+
+<template id="template_modelisation_body">
+    <div>
+          <div class="card">
+            <h5 class="card-header" v-html="modelisation.container.name"></h5>
+            <div class="card-body">
+                
+            </div>
+          </div>  
+    </div>
+</template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

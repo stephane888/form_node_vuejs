@@ -1,0 +1,34 @@
+addnode:
+  js:
+    js/addnode.js: {}
+    
+editnode:
+  js:
+    js/editnode.js: {}
+    
+default:
+  css:
+    component:
+      files/jquery-ui/jquery-ui.min.css: {}
+      files/jquery-ui/jquery-ui.theme.min.css: {} 
+      files/clock-picker/dist/bootstrap-clockpicker.min.css: {}
+      files/select2/css/select2.min.css: {}
+      files/select2/css/select2-bootstrap4.min.css: {}
+      css/style.css: {}
+  js:
+    files/vuejs/vue.js: {}
+    files/jquery-ui/jquery-ui.min.js: {}
+    files/ckeditor/ckeditor.js: {}  
+    files/clock-picker/dist/bootstrap-clockpicker.min.js: {}
+    files/Load-Image/js/load-image.all.min.js: {}
+    files/select2/js/select2.full.min.js: {}
+    files/js-cookie/js.cookie.min.js: {}
+    js/components.js: {}
+  dependencies:
+    - core/jquery
+    #- core/jquery.once
+    #- core/jquery.cookie
+    #- core/drupal
+    #- core/drupalSettings
+    
+    

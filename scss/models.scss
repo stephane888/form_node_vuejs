@@ -1,0 +1,133 @@
+/**
+* translation on hover
+*/
+@mixin transition($propriete:all, $temps:0.3s,$style:ease-in-out){
+  transition-property: $propriete;
+  transition-duration: $temps;
+  transition-timing-function: $style;
+}
+
+/**
+* Before cover
+*/
+@mixin beforeCover($bg_color: rgba(5, 12, 29, 0.4), $zindex: 0){
+  z-index: 2;position: relative;
+  &::before{
+    background-color: $bg_color;    z-index: $zindex;    right: 0;    bottom: 0;
+    display: block;    left: 0;    top: 0;    position: absolute;    content: '';    
+  }
+}
+
+/**
+* Before cover
+*/
+@mixin afterCover($bg_color: rgba(5, 12, 29, 0.4)){
+  z-index: 2;position: relative;
+  &::after{
+    background-color: $bg_color;    z-index: 0;    right: 0;    bottom: 0;
+    display: block;    left: 0;    top: 0;    position: absolute;    content: '';    
+  }
+}
+
+/**
+ *  pas de retour à la ligne
+ */
+@mixin notbackline($width:100px){    
+  height: auto;    width: $width;    overflow: hidden;    white-space: nowrap;    text-overflow: ellipsis;
+}
+
+/**
+ *  mixin for multiline limit text css
+ */
+@mixin multiLineEllipsis($lineHeight:1.2em, $lineCount: 1, $bgColor: white, $text-align:left ){
+  overflow: hidden;
+  display: block;
+  position: relative;
+  line-height: $lineHeight;
+  max-height: $lineHeight * $lineCount; 
+  text-align: $text-align;
+  margin-right: -0.5em;
+  padding-right: 0.5em;
+  &:before {    content: '...';    position: absolute;    right: 0;    bottom: 0;    opacity:0.5;  }
+  &:after {    content: '';    position: absolute;    right: 0;    width: 1em;    height: 1em;    margin-top: 0.2em;    background: $bgColor;  }
+}
+
+
+
+//https://codepen.io/wabeshew/pen/XdbBdM
+@mixin waitingboule(){
+  $width: 15px;
+  $height: 15px;
+  $bounce_height: 30px;
+  .bounceball {
+  position: relative;
+  display: inline-block;
+  height: 37px;
+  width: $width;
+  &:before {
+    position: absolute;
+    content: '';
+    display: block;
+    top: 0;
+    width: $width;
+    height: $height;
+    border-radius: 50%;
+    background-color: #fbae17;
+    transform-origin: 50%;
+    animation: bounce 500ms alternate infinite ease;
+  }
+}
+
+@keyframes bounce {
+  0% {
+    top: $bounce_height;
+    height: 5px;
+    border-radius: 60px 60px 20px 20px;
+    transform: scaleX(2);
+  }
+  35% {
+    height: $height;
+    border-radius: 50%;
+    transform: scaleX(1);
+  }
+  100% {
+    top: 0;
+  }
+}
+
+}
+
+
+
+/**
+ * .list-element{@include list-element(($paddingY:10px, $paddingX:5px, $borderW:1px));}
+ */
+@mixin list-element($paddingT:10px, $paddingB:10px, $paddingL:5px, $paddingR:5px, $borderW:1px){  
+    margin:0; list-style:none; padding:0; max-width:600px;
+    li{ padding:$paddingT $paddingR $paddingB $paddingL; display:flex; margin: 0;
+        justify-content: space-between;
+      border-bottom: $borderW solid $border-color;
+      >*:first-child{min-width: auto;}
+      >*:first-child + *{ text-align:right; min-width:50px;}
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

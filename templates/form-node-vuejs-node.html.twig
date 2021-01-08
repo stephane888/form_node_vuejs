@@ -1,0 +1,38 @@
+{% if children['#status'].status %}
+<section id="FormGenerate">
+  <div class="row">
+      <div class="col-sm-12">
+        <alert :show_alert="show_alert" :alert_message="message" :alert_attribut_class="attribut_class" :alert_id_html="id_html_form" @ev_alert_close="closeByParent"></alert>
+      </div>
+      <div class="col-sm-8">
+        <formgenerate_node :bundle="bundle" action="{{children['#action']}}" @ev_actionparent="form_parentaction" :execute_saveform="execute_saveform"></formgenerate_node>
+      </div>
+      <div class="col-sm-4" >
+        <div class="">
+          <div class="form-body0" v-if="template=='addnode'">
+            <list_group :header="header_relation" :rows="rows_relation" :show_header="show_header_relation"></list_group>
+            <list_group :header="header_next" :rows="rows_next" :show_header="show_header_next" @ev_click_on_list="click_on_list"></list_group>
+            <list_group :header="header_reccent" :rows="rows_reccent" :show_header="show_header_reccent"></list_group>
+          </div>
+          <div class="form-body0" v-if="template=='editnode'">
+            <list_group :header="header_info" :rows="rows_info" :show_header="show_header_info"></list_group>
+            <list_group :header="header_relation" :rows="rows_relation" :show_header="show_header_relation"></list_group>
+            <list_group :header="header_next" :rows="rows_next" :show_header="show_header_next" @ev_click_on_list="click_on_list"></list_group>
+          </div>
+        </div>
+      </div>
+  </div>
+</section>
+{% include '@form_node_vuejs/form_node_vuejs_components.html.twig' %} 
+{% else %}
+<div class="card warning">
+  <h5 class="card-header text-white bg-warning">Accès restreint</h5>
+  <div class="card-body">
+    <div class="card-text">{{ children['#status'].msg }}</div>
+    <div class="mt-5">
+      <a class="btn btn-outline-primary mt-3" href="/compte/user/coupon">Ajouter un coupou</a>
+      <a class="btn btn-outline-primary mt-3 ml-5" href="/compte/user/ticket">Acheter un ticket</a>
+    </div>
+  </div>
+</div>
+{% endif %}
