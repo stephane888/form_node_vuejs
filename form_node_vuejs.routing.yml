@@ -35,7 +35,18 @@ form_node_vuejs.getformnode:
     _controller: '\Drupal\form_node_vuejs\Controller\FormNodeVuejsApi::getForm'
     _title: 'Ajouter du contenu'
   options:
-    _auth: [ 'basic_auth' ]
+    _auth: ['basic_auth','cookie']
+  requirements:
+    _user_is_logged_in: 'TRUE'
+   
+form_node_vuejs.gettaxoterms:
+  path: '/api/form-node-vuejs/terms/{vid}'
+  methods: [GET]
+  defaults:
+    _controller: '\Drupal\form_node_vuejs\Controller\FormNodeVuejsApi::getTerms'
+    _title: 'get terms by VID'
+  options:
+    _auth: ['basic_auth','cookie']
   requirements:
     _user_is_logged_in: 'TRUE'
     

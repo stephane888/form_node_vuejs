@@ -1444,7 +1444,7 @@ jQuery(document).ready( function($) {
 				 var self=this;
 				 console.log('Add termes');
 				 var term = $('.select2-dropdown.'+this	.field.model+' .select2-search__field').val();
-				 var post_datas={
+				 var post_datas=  {
 					 'vid': self.vocabulaire_name,
 					 'name': term,
 				 }

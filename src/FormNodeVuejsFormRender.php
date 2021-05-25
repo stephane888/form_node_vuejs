@@ -68,10 +68,12 @@ class FormNodeVuejsFormRender {
     if (! empty($relationnode)) {
       $relationnode = Json::decode($relationnode);
     }
+
     return [
       'fields' => $fields,
       'bundles_infos' => \Drupal::service("entity_type.bundle.info")->getAllBundleInfo()['node'],
-      'relationnode' => $relationnode
+      'relationnode' => $relationnode,
+      'bundle'
     ];
   }
 
@@ -120,5 +122,19 @@ class FormNodeVuejsFormRender {
     }
     // \Drupal\debug_log\debugLog::logs( $terms[3], 'taxonomy_term', 'kint0');
     return $terms;
+  }
+
+  /**
+   * Retourne les champs drupal.
+   *
+   * @param string $bundle
+   * @return array
+   */
+  public function getFieldsMapper($bundle)
+  {
+    return $this->getDefinitionsNode($bundle);
+    // $entity_type = 'node';
+    // $entityManager = \Drupal::service('entity_field.manager');
+    // return $entityManager->getFieldDefinitions($entity_type, $bundle);
   }
 }

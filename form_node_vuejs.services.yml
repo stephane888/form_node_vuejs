@@ -1,0 +1,3 @@
+services:
+  form_node_vuejs.form_node_vuejs:
+    class: Drupal\form_node_vuejs\FormNodeVuejs;
