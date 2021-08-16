@@ -49,4 +49,22 @@ form_node_vuejs.gettaxoterms:
     _auth: ['basic_auth','cookie']
   requirements:
     _user_is_logged_in: 'TRUE'
+
+
+form_node_vuejs.current_user:
+  path: '/api/form-node-vuejs/current-user'
+  defaults:
+    _title: 'Travaux de renovations'
+    _controller: '\Drupal\form_node_vuejs\Controller\UserController::currentUser'
+  requirements:
+    _permission: 'access content'
+
+form_node_vuejs.user:
+  path: '/api/form-node-vuejs/user'
+  defaults:
+    _title: 'Travaux de renovations'
+    _controller: '\Drupal\form_node_vuejs\Controller\UserController::getUser'
+  requirements:
+    _permission: 'access content'
+
     
