@@ -1,6 +1,5 @@
 {
     "name": "stephane888/form_node_vuejs",
-    "type": "drupal-module",
     "description": "permet de creer, modifier ou supprimer les nodes avec VueJs",
     "type": "drupal-module-custom",
     "keywords": [
