@@ -2,7 +2,7 @@
     "name": "form_node_vuejs",
     "type": "drupal-module",
     "description": "permet de creer, modifier ou supprimer les nodes avec VueJs",
-    "type": "drupal-module",
+    "type": "drupal-module-custom",
     "keywords": [
     ],
     "homepage": "https://www.drupal.org/project/form_node_vuejs",
