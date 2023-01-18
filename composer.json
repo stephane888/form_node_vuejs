@@ -9,5 +9,9 @@
     "support": {
         "issues": "https://www.drupal.org/project/issues/form_node_vuejs",
         "source": "http://cgit.drupalcode.org/form_node_vuejs"
+    },
+    "require": {
+    	"drupal/restui": "^1.21",
+    	"stephane888/query_ajax": "dev-1x"
     }
 }
