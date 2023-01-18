@@ -2,6 +2,7 @@
     "name": "stephane888/form_node_vuejs",
     "description": "permet de creer, modifier ou supprimer les nodes avec VueJs",
     "type": "drupal-module-custom",
+    "license": "MIT",
     "keywords": [
     ],
     "homepage": "https://www.drupal.org/project/form_node_vuejs",
